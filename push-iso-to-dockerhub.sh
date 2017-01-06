@@ -40,8 +40,8 @@ fi
 
 
 echo "# Creting files for docker image"
-dockerfile_iso_path="iso"
-dockerfile_filesystem="filesystem"
+dockerfile_iso_path="docker/iso"
+dockerfile_filesystem="docker/filesystem"
 rm -f "$dockerfile_iso_path" "$dockerfile_filesystem"
 ln -s -T "$mount_point" "$dockerfile_iso_path"
 ln -s -T "$filesyetem" "$dockerfile_filesystem"

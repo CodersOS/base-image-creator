@@ -1,0 +1,7 @@
+tmp/*
+toiso
+dev/pts/*
+proc/*
+sys/*
+.dockerenv
+iso
