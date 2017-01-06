@@ -53,7 +53,7 @@ docker_image_name="`echo \"${image_name%.*}\" | tr -c '[:alnum:]._-' _`"
 full_docker_image_name="$dockerhub_organization/$docker_image_name"
 echo "# labels: $docker_image_name and $full_docker_image_name"
 
-docker build --label "$full_docker_image_name" --label "$docker_image_name" .
+docker build --label "$full_docker_image_name" --label "$docker_image_name" docker
 
 echo "# Pushing the image to dockerhub"
 if ! [ -e "~/.docker/config.json" ]
