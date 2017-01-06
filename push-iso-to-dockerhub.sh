@@ -19,7 +19,7 @@ image_name="`basename \"$image\"`"
 mount_point="$image_name-mount"
 filesystem="$image_name-filesystem"
 mkdir -p "$mount_point"
-if [ -z "`ls \"$mount_point\"`" ]
+if [ -z "`ls \"$mount_point\" 2>/dev/null`" ]
 then
   sudo mount -o loop "$image" "$mount_point"
 else
@@ -27,13 +27,12 @@ else
 fi
 
 echo "# Unpacking the file system."
-if [ -z "`ls \"$filesystem\"`" ]
+if [ -z "`ls \"$filesystem\" 2>/dev/null`" ]
 then
-  (
-    cd "$mount_point"
-    filesystem_squashfs="`find -name filesystem.squashfs`"
-  )
-  sudo unsquashfs -f "$mount_point/$filesystem_squashfs" -d "$filesystem"
+  filesystem_squashfs="$mount_point/`( cd \"$mount_point\" && find -name filesystem.squashfs )`"
+  echo "# extracting filesystem from $filesystem_squashfs"
+  mkdir -p "$filesystem"
+  sudo unsquashfs -f -d "$filesystem" "$filesystem_squashfs"
 else
   echo "# This was done before, doing nothing."
 fi
