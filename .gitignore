@@ -1,3 +1,5 @@
 /*.iso
 /*-mount
 /*-filesystem
+/docker/iso
+/docker/filesystem
