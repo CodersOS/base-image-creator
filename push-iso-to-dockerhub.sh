@@ -43,7 +43,7 @@ dockerfile_iso_path="docker/iso"
 dockerfile_filesystem="docker/filesystem"
 rm -f "$dockerfile_iso_path" "$dockerfile_filesystem"
 ln -s -T "$mount_point" "$dockerfile_iso_path"
-ln -s -T "$filesyetem" "$dockerfile_filesystem"
+ln -s -T "$filesystem" "$dockerfile_filesystem"
 
 echo "# Creating docker image name accoring to"
 echo "#   https://github.com/docker/docker/blob/master/image/spec/v1.md"
