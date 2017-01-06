@@ -3,3 +3,4 @@
 /*-filesystem
 /docker/iso
 /docker/filesystem
+*.swp
