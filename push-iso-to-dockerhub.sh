@@ -5,6 +5,14 @@ cd "`dirname \"$0\"`"
 
 image="$1"
 
+cache="docker/filesystem.origin"
+if [ -f "$cache" ]
+then
+  target="`cat \"$cache\"`"
+  rm "$cache"
+  mv "$dockerfile_filesystem" "$target"
+fi
+
 if [ -z "$image" ]
 then
   echo "# Please pass the image as the first argument!"
@@ -53,12 +61,12 @@ echo "# Mounting iso and filesystemin docker folder"
 dockerfile_iso_path="docker/iso"
 dockerfile_filesystem="docker/filesystem"
 
+sudo rm -rf "$dockerfile_filesystem"
 mkdir -p "$dockerfile_iso_path"
-mkdir -p "$dockerfile_filesystem"
 sudo umount "$dockerfile_iso_path" 2>>/dev/null || true
-sudo umount "$dockerfile_filesystem" 2>>/dev/null || true
-sudo mount --bind "$mount_point" "$dockerfile_iso_path"
-sudo mount --bind "$filesystem" "$dockerfile_filesystem"
+mount --bind "$mount_point" "$dockerfile_iso_path"
+mv "$filesystem" "$dockerfile_filesystem"
+echo -n "$dockerfile_filesystem" > "$cache"
 
 echo "# Creating docker image name accoring to"
 echo "#   https://github.com/docker/docker/blob/master/image/spec/v1.md"
