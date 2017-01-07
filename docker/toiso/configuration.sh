@@ -14,4 +14,4 @@ IMAGE_NAME="CodersOS"
 iso_image="/toiso/$IMAGE_NAME.iso"
 
 # squashed filesystem location
-filesystem_location="$image/`cat filesystem.squashfs.directory`"
+filesystem_location="$image/`cat /toiso/filesystem.squashfs.directory`"
