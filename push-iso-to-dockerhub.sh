@@ -12,7 +12,19 @@ then
 fi
 
 echo "# Installing tools ... "
-sudo apt-get -y -qq install squashfs-tools
+install=""
+if ! [ -e "/usr/bin/realpath" ]
+then
+  install="$install realpath"
+fi
+if ! [ -e "/usr/bin/unsquashfs" ]
+then
+  install="$install squashfs-tools"
+fi
+if [ -n "$install" ]
+then
+  sudo apt-get -y -qq install $install
+fi
 
 echo "# Reading ISO contents ... "
 image_name="`basename \"$image\"`"
@@ -37,22 +49,32 @@ else
   echo "# This was done before, doing nothing."
 fi
 
-
-echo "# Creting files for docker image"
+echo "# Mounting iso and filesystemin docker folder"
 dockerfile_iso_path="docker/iso"
 dockerfile_filesystem="docker/filesystem"
-rm -f "$dockerfile_iso_path" "$dockerfile_filesystem"
-ln -s -T "$mount_point" "$dockerfile_iso_path"
-ln -s -T "$filesystem" "$dockerfile_filesystem"
+
+mkdir -p "$dockerfile_iso_path"
+mkdir -p "$dockerfile_filesystem"
+sudo umount "$dockerfile_iso_path" 2>>/dev/null || true
+sudo umount "$dockerfile_filesystem" 2>>/dev/null || true
+sudo mount --bind "$mount_point" "$dockerfile_iso_path"
+sudo mount --bind "$filesystem" "$dockerfile_filesystem"
 
 echo "# Creating docker image name accoring to"
 echo "#   https://github.com/docker/docker/blob/master/image/spec/v1.md"
 dockerhub_organization="codersosimages"
-docker_image_name="`echo \"${image_name%.*}\" | tr -c '[:alnum:]._-' _`"
+docker_image_name="`echo \"${image_name%.*}\" | tr -c '[:alnum:]._-' _ | head -c -1`"
 full_docker_image_name="$dockerhub_organization/$docker_image_name"
 echo "# labels: $docker_image_name and $full_docker_image_name"
 
-docker build --label "$full_docker_image_name" --label "$docker_image_name" docker
+if sudo docker build --label "$full_docker_image_name" --label "$docker_image_name" docker
+then
+  back
+else
+  code="$?"
+  back
+  exit "$code"
+fi
 
 echo "# Pushing the image to dockerhub"
 if ! [ -e "~/.docker/config.json" ]
