@@ -86,8 +86,4 @@ sudo docker rmi "$docker_image_name"
 sudo docker build -t "$full_docker_image_name" -t "$docker_image_name" docker
 
 echo "# Pushing the image to dockerhub"
-if ! [ -e "~/.docker/config.json" ]
-then
-  docker login
-fi
 docker push "$full_docker_image_name"
