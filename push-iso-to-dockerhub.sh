@@ -50,9 +50,10 @@ else
 fi
 
 echo "# Unpacking the file system to $filesystem"
+relative_filesystem_squashfs="`( cd \"$mount_point\" && find -name filesystem.squashfs )`"
 if [ -z "`ls \"$filesystem\" 2>/dev/null`" ]
 then
-  filesystem_squashfs="$mount_point/`( cd \"$mount_point\" && find -name filesystem.squashfs )`"
+  filesystem_squashfs="$mount_point/$relative_filesystem_squashfs"
   echo "# extracting filesystem from $filesystem_squashfs"
   mkdir -p "$filesystem"
   sudo unsquashfs -f -d "$filesystem" "$filesystem_squashfs"
@@ -70,6 +71,9 @@ sudo mount --bind "$mount_point" "$dockerfile_iso_path"
 sudo mv "$filesystem" "$dockerfile_filesystem"
 echo -n "$dockerfile_filesystem" > "$cache"
 
+echo "Setting relative filesystem.sqashfs path."
+echo -n "`dirname \"$relative_filesystem_squashfs_path\"`" > docker/toiso/filesystem.squashfs.directory
+
 echo "# Creating docker image name accoring to"
 echo "#   https://github.com/docker/docker/blob/master/image/spec/v1.md"
 dockerhub_organization="codersosimages"
@@ -77,7 +81,7 @@ docker_image_name="`echo \"${image_name%.*}\" | tr -c '[:alnum:]._-' _ | head -c
 full_docker_image_name="$dockerhub_organization/$docker_image_name"
 echo "# labels: $docker_image_name and $full_docker_image_name"
 
-sudo docker build --label "$full_docker_image_name" --label "$docker_image_name" docker
+sudo docker build -t "$full_docker_image_name" -t "$docker_image_name" docker
 
 echo "# Pushing the image to dockerhub"
 if ! [ -e "~/.docker/config.json" ]
