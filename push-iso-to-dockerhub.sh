@@ -69,7 +69,7 @@ mkdir -p "$dockerfile_iso_path"
 sudo umount "$dockerfile_iso_path" 2>>/dev/null || true
 sudo mount --bind "$mount_point" "$dockerfile_iso_path"
 sudo mv "$filesystem" "$dockerfile_filesystem"
-echo -n "$dockerfile_filesystem" > "$cache"
+echo -n "$filesystem" > "$cache"
 
 echo "Setting relative filesystem.sqashfs path."
 echo -n "`dirname \"$relative_filesystem_squashfs_path\"`" > "docker/toiso/filesystem.squashfs.directory"
