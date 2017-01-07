@@ -3,4 +3,6 @@
 /*-filesystem
 /docker/iso
 /docker/filesystem
+/docker/filesystem.origin
 *.swp
+/docker/toiso/filesystem.squashfs.directory
