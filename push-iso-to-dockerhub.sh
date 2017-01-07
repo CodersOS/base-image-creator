@@ -38,6 +38,7 @@ echo "# Reading ISO contents ... "
 image_name="`basename \"$image\"`"
 mount_point="$image_name-mount"
 filesystem="$image_name-filesystem"
+echo "# mounting iso to $mount_point"
 mkdir -p "$mount_point"
 if [ -z "`ls \"$mount_point\" 2>/dev/null`" ]
 then
@@ -46,7 +47,7 @@ else
   echo "# This was done before, doing nothing."
 fi
 
-echo "# Unpacking the file system."
+echo "# Unpacking the file system to $filesystem"
 if [ -z "`ls \"$filesystem\" 2>/dev/null`" ]
 then
   filesystem_squashfs="$mount_point/`( cd \"$mount_point\" && find -name filesystem.squashfs )`"
@@ -57,15 +58,15 @@ else
   echo "# This was done before, doing nothing."
 fi
 
-echo "# Mounting iso and filesystemin docker folder"
+echo "# Mounting iso and filesystem in docker folder"
 dockerfile_iso_path="docker/iso"
 dockerfile_filesystem="docker/filesystem"
 
 sudo rm -rf "$dockerfile_filesystem"
 mkdir -p "$dockerfile_iso_path"
 sudo umount "$dockerfile_iso_path" 2>>/dev/null || true
-mount --bind "$mount_point" "$dockerfile_iso_path"
-mv "$filesystem" "$dockerfile_filesystem"
+sudo mount --bind "$mount_point" "$dockerfile_iso_path"
+sudo mv "$filesystem" "$dockerfile_filesystem"
 echo -n "$dockerfile_filesystem" > "$cache"
 
 echo "# Creating docker image name accoring to"
