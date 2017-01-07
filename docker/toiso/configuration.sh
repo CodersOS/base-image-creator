@@ -1,3 +1,6 @@
+#
+# ATTENTION! All paths must be abslute!
+#
 # the location of the files which are in the iso file
 image="/iso"
 
@@ -9,3 +12,6 @@ IMAGE_NAME="CodersOS"
 
 # the name of the image file
 iso_image="/toiso/$IMAGE_NAME.iso"
+
+# squashed filesystem location
+filesystem_location="$image/`cat filesystem.squashfs.directory`"

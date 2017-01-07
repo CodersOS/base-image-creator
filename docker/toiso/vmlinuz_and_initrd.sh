@@ -8,10 +8,10 @@ echo "command > creating the vmlinuz and initrd files"
 
 for file in /boot/vmlinuz-**.**.**-**-generic
 do
-  cp "$file" "$image/casper/vmlinuz.efi"
+  cp "$file" "$filesystem_location/vmlinuz.efi"
 done
 
 for file in /boot/initrd.img-**.**.**-**-generic
 do
-  cp "$file" "$image/casper/initrd.lz"
+  cp "$file" "$filesystem_location/initrd.lz"
 done
