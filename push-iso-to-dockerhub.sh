@@ -82,6 +82,7 @@ full_docker_image_name="$dockerhub_organization/$docker_image_name"
 echo "# labels: $docker_image_name and $full_docker_image_name"
 
 sudo docker rmi "$full_docker_image_name"
+sudo docker rmi "$docker_image_name"
 sudo docker build -t "$full_docker_image_name" -t "$docker_image_name" docker
 
 echo "# Pushing the image to dockerhub"
