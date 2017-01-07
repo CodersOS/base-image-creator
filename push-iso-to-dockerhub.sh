@@ -51,6 +51,11 @@ fi
 
 echo "# Unpacking the file system to $filesystem"
 relative_filesystem_squashfs="`( cd \"$mount_point\" && find -name filesystem.squashfs )`"
+if [ -z "$relative_filesystem_squashfs" ]
+then
+  echo "# ERROR: did not find filesystem.squashfs in $mount_point"
+  exit 1
+fi
 if [ -z "`ls \"$filesystem\" 2>/dev/null`" ]
 then
   filesystem_squashfs="$mount_point/$relative_filesystem_squashfs"
