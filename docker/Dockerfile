@@ -20,3 +20,4 @@ RUN apt-get update && \
     apt-get -qq -y install squashfs-tools && \
     apt-get clean
 
+RUN /toiso/clean_up.sh
