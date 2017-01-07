@@ -71,8 +71,8 @@ sudo mount --bind "$mount_point" "$dockerfile_iso_path"
 sudo mv "$filesystem" "$dockerfile_filesystem"
 echo -n "$filesystem" > "$cache"
 
-echo "Setting relative filesystem.sqashfs path."
-echo -n "`dirname \"$relative_filesystem_squashfs_path\"`" > "docker/toiso/filesystem.squashfs.directory"
+echo "Setting relative filesystem.squashfs path."
+echo -n "`dirname \"$relative_filesystem_squashfs\"`" > "docker/toiso/filesystem.squashfs.directory"
 
 echo "# Creating docker image name accoring to"
 echo "#   https://github.com/docker/docker/blob/master/image/spec/v1.md"
