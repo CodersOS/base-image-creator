@@ -5,12 +5,14 @@ cd "`dirname \"$0\"`"
 
 image="$1"
 
+dockerfile_filesystem="docker/filesystem"
 cache="docker/filesystem.origin"
 if [ -f "$cache" ]
 then
   target="`cat \"$cache\"`"
+  echo "# Found previous file system in $cache. Mooving it to \"$target\"."
   rm "$cache"
-  mv "$dockerfile_filesystem" "$target"
+  sudo mv "$dockerfile_filesystem" "$target"
 fi
 
 if [ -z "$image" ]
@@ -60,7 +62,6 @@ fi
 
 echo "# Mounting iso and filesystem in docker folder"
 dockerfile_iso_path="docker/iso"
-dockerfile_filesystem="docker/filesystem"
 
 sudo rm -rf "$dockerfile_filesystem"
 mkdir -p "$dockerfile_iso_path"
