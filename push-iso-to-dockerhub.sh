@@ -42,12 +42,8 @@ mount_point="$image_name-mount"
 filesystem="$image_name-filesystem"
 echo "# mounting iso to $mount_point"
 mkdir -p "$mount_point"
-if [ -z "`ls \"$mount_point\" 2>/dev/null`" ]
-then
-  sudo mount -o loop "$image" "$mount_point"
-else
-  echo "# This was done before, doing nothing."
-fi
+sudo umount "$mount_point" 2>>/dev/null || true
+sudo mount -o loop "$image" "$mount_point"
 
 echo "# Unpacking the file system to $filesystem"
 relative_filesystem_squashfs="`( cd \"$mount_point\" && find -name filesystem.squashfs )`"
