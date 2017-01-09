@@ -17,7 +17,7 @@ CMD ["/bin/bash"]
 
 # Install packages for iso creation.
 RUN apt-get update && \
-    apt-get -qq -y install squashfs-tools && \
+    apt-get -qq -y --purge install squashfs-tools && \
     apt-get clean
 
 RUN /toiso/clean_up.sh
