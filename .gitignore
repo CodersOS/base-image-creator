@@ -6,3 +6,4 @@
 /docker/filesystem.origin
 *.swp
 /docker/toiso/filesystem.squashfs.directory
+/docker/toiso/packages-to-remove.txt
