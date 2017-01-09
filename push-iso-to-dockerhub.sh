@@ -62,13 +62,16 @@ else
   echo "# This was done before, doing nothing."
 fi
 
-echo "# Mounting iso and filesystem in docker folder"
+echo "# Copying iso to docker folder"
 dockerfile_iso_path="docker/iso"
 
-sudo rm -rf "$dockerfile_filesystem"
 mkdir -p "$dockerfile_iso_path"
-sudo umount "$dockerfile_iso_path" 2>>/dev/null || true
-sudo mount --bind "$mount_point" "$dockerfile_iso_path"
+cp -r -t "$dockerfile_iso_path" "$mount_point"
+echo "# Removing filesytem.squashfs since it is not needed in container."
+rm "$docker_iso_path/$relative_filesystem_squashfs"
+
+echo "# Moving file system to docker folder"
+sudo rm -rf "$dockerfile_filesystem"
 sudo mv "$filesystem" "$dockerfile_filesystem"
 echo -n "$filesystem" > "$cache"
 
