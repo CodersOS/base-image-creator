@@ -97,4 +97,4 @@ sudo docker rmi -f "$docker_image_name" 2>>/dev/null || true
 sudo docker build -t "$docker_image_name" docker
 
 echo "# Pushing the image to dockerhub"
-docker push "$full_docker_image_name"
+docker push "$docker_image_name"
