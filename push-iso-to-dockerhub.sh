@@ -65,6 +65,7 @@ fi
 echo "# Copying iso to docker folder"
 dockerfile_iso_path="docker/iso"
 
+sudo rm -rf "$dockerfile_iso_path"
 mkdir -p "$dockerfile_iso_path"
 cp -r -t "$dockerfile_iso_path" "$mount_point"
 echo "# Removing filesytem.squashfs since it is not needed in container."
