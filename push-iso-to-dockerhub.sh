@@ -74,7 +74,7 @@ do
   then
     mkdir -p "$dockerfile_iso_path/$source"
   else
-    cp -vt "$dockerfile_iso_path/`dirname \"$source\"`" "$mount_point/$source"
+    cp -t "$dockerfile_iso_path/`dirname \"$source\"`" "$mount_point/$source"
   fi
 done
 
