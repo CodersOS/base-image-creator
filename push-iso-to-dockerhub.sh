@@ -90,12 +90,11 @@ echo "# Creating docker image name accoring to"
 echo "#   https://github.com/docker/docker/blob/master/image/spec/v1.md"
 dockerhub_organization="codersosimages"
 docker_image_name="`echo \"${image_name%.*}\" | tr -c '[:alnum:]._-' _ | head -c -1`"
-full_docker_image_name="$dockerhub_organization/$docker_image_name"
+docker_image_name="$dockerhub_organization/$docker_image_name"
 echo "# labels: $docker_image_name and $full_docker_image_name"
 
-sudo docker rmi -f "$full_docker_image_name" 2>>/dev/null || true
 sudo docker rmi -f "$docker_image_name" 2>>/dev/null || true
-sudo docker build -t "$full_docker_image_name" -t "$docker_image_name" docker
+sudo docker build -t "$docker_image_name" docker
 
 echo "# Pushing the image to dockerhub"
 docker push "$full_docker_image_name"
