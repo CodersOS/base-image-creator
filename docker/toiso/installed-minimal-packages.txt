@@ -420,3 +420,6 @@ lupin-casper
 laptop-detect
 os-prober
 linux-generic
+
+# for docker
+aufs-tools
