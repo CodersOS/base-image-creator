@@ -10,7 +10,7 @@ cache="docker/filesystem.origin"
 if [ -f "$cache" ]
 then
   target="`cat \"$cache\"`"
-  echo "# Found previous file system in $cache. Mooving it to \"$target\"."
+  echo "# Found previous file system in $cache. Moving it to \"$target\"."
   rm "$cache"
   sudo mv "$dockerfile_filesystem" "$target"
 fi
@@ -67,9 +67,16 @@ dockerfile_iso_path="docker/iso"
 
 sudo rm -rf "$dockerfile_iso_path"
 mkdir -p "$dockerfile_iso_path"
-cp -r -t "$dockerfile_iso_path" "$mount_point"
 echo "# Removing filesytem.squashfs since it is not needed in container."
-rm "$docker_iso_path/$relative_filesystem_squashfs"
+for source in `( cd "$mount_point" ; find . -not -name filesystem.squashfs )`
+do
+  if [ -d "$mount_point/$source" ]
+  then
+    mkdir -p "$dockerfile_iso_path/$source"
+  else
+    cp -vt "$dockerfile_iso_path/`dirname \"$source\"`" "$mount_point/$source"
+  fi
+done
 
 echo "# Moving file system to docker folder"
 sudo rm -rf "$dockerfile_filesystem"
