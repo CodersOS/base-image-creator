@@ -9,7 +9,7 @@ minimal_packages="`cat installed-minimal-packages.txt | grep -vE '^\s*#|^\s*$'`"
 for package in $minimal_packages
 do
   echo -n "Installing package $package ... "
-  if true || apt-get -y -q --purge install "$package"
+  if apt-get -y -q --purge install "$package"
   then
     echo "ok"
   else
@@ -25,7 +25,7 @@ do
     echo "Not removing because of dependencies: $package ->" $dependencies
   else
     echo -n "Removing package $package ... "
-    if true || apt-get -y -qq --purge remove "$package"
+    if apt-get -y -qq --purge remove "$package"
     then
       echo "ok"
     else
