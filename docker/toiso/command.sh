@@ -19,4 +19,5 @@
 if [ "$1" != "-q" ]
 then
   ./iso.sh
+  1>&2 echo "Done writing image to stdout."
 fi
