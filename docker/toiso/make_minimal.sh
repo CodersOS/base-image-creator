@@ -33,3 +33,5 @@ do
     fi
   fi
 done
+
+./clean_up.sh
