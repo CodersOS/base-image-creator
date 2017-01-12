@@ -4,6 +4,7 @@ from scratch
 ADD filesystem /
 ADD iso /iso
 ADD toiso /toiso
+ADD fixes /fixes
 
 # Set environment variables.
 ENV HOME /root
@@ -20,4 +21,5 @@ RUN apt-get update && \
     apt-get -qq -y --purge install squashfs-tools && \
     apt-get clean
 
+RUN /fixes/once.sh
 RUN /toiso/clean_up.sh
