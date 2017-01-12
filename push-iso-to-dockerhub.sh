@@ -3,6 +3,14 @@ set -e
 
 cd "`dirname \"$0\"`"
 
+date_of_start=$(date +"%s")
+function duration() {
+  local now=$(date +"%s")
+  local _duration=$(($now-$date_of_start))
+  echo "# Duration: $(($_duration / 60))m $(($_duration % 60))s"
+}
+
+
 image="$1"
 
 dockerfile_filesystem="docker/filesystem"
@@ -37,19 +45,23 @@ then
 fi
 
 echo "# Reading ISO contents ... "
+duration
 image_name="`basename \"$image\"`"
 mount_point="$image_name-mount"
 filesystem="$image_name-filesystem"
 echo "# mounting iso to $mount_point"
+duration
 mkdir -p "$mount_point"
 sudo umount "$mount_point" 2>>/dev/null || true
 sudo mount -o loop "$image" "$mount_point"
 
 echo "# Unpacking the file system to $filesystem"
+duration
 relative_filesystem_squashfs="`( cd \"$mount_point\" && find -name filesystem.squashfs )`"
 if [ -z "$relative_filesystem_squashfs" ]
 then
   echo "# ERROR: did not find filesystem.squashfs in $mount_point"
+  duration
   exit 1
 fi
 if [ -z "`ls \"$filesystem\" 2>/dev/null`" ]
@@ -63,11 +75,13 @@ else
 fi
 
 echo "# Copying iso to docker folder"
+duration
 dockerfile_iso_path="docker/iso"
 
 sudo rm -rf "$dockerfile_iso_path"
 mkdir -p "$dockerfile_iso_path"
 echo "# Removing filesytem.squashfs since it is not needed in container."
+duration
 for source in `( cd "$mount_point" ; find . -not -name filesystem.squashfs )`
 do
   if [ -d "$mount_point/$source" ]
@@ -79,11 +93,12 @@ do
 done
 
 echo "# Moving file system to docker folder"
+duration
 sudo rm -rf "$dockerfile_filesystem"
 sudo mv "$filesystem" "$dockerfile_filesystem"
 echo -n "$filesystem" > "$cache"
 
-echo "Setting relative filesystem.squashfs path."
+echo "# Setting relative filesystem.squashfs path."
 echo -n "`dirname \"$relative_filesystem_squashfs\"`" > "docker/toiso/filesystem.squashfs.directory"
 
 echo "# Creating docker image name accoring to"
@@ -92,9 +107,12 @@ dockerhub_organization="codersosimages"
 docker_image_name="`echo \"${image_name%.*}\" | tr -c '[:alnum:]._-' _ | head -c -1`"
 docker_image_name="$dockerhub_organization/$docker_image_name"
 echo "# labels: $docker_image_name and $full_docker_image_name"
+duration
 
 sudo docker rmi -f "$docker_image_name" 2>>/dev/null || true
 sudo docker build -t "$docker_image_name" docker
 
 echo "# Pushing the image to dockerhub"
+duration
 docker push "$docker_image_name"
+
