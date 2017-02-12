@@ -49,11 +49,16 @@ duration
 image_name="`basename \"$image\"`"
 mount_point="$image_name-mount"
 filesystem="$image_name-filesystem"
-echo "# mounting iso to $mount_point"
+
+echo "# Mounting iso to $mount_point"
 duration
 mkdir -p "$mount_point"
-sudo umount "$mount_point" 2>>/dev/null || true
-sudo mount -o loop "$image" "$mount_point"
+sudo umount "$mount_point" 2> /tmp/mount-error || true
+if ! sudo mount -o loop "$image" "$mount_point"
+then
+  cat /tmp/mount-error
+  exit 1
+fi
 
 echo "# Unpacking the file system to $filesystem"
 duration
