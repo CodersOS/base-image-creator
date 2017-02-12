@@ -18,3 +18,11 @@ How to customize a live CD
 
 
 [add-image]: #add-an-image
+
+Related Work
+------------
+
+- [Meilix](https://github.com/fossasia/meilix/) - a Linux distribution
+  for hotels with a continuous integration build script
+- [Live CD Customization](https://help.ubuntu.com/community/LiveCDCustomizationFromScratch) - 
+  a tutorial
